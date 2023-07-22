@@ -16,7 +16,6 @@
         <!-- Columnas de la tabla -->
         <Column field="tipo_usuario_id" header="ID"></Column>
         <Column field="nombre" header="Nombre"></Column>
-        <Column header="Acciones" :exportable="false"></Column>
         <!-- Custom slot for actions buttons in each row -->
         <Column :exportable="false" style="min-width: 8rem">
           <template #body="slotProps">
@@ -34,7 +33,22 @@
         </Column>
       </DataTable>
     </div>
-
+    <!-- Formulario para agregar tipo de usuario -->
+    <div class="card">
+      <h3>Agregar Tipo de Usuario</h3>
+      <div class="p-grid p-fluid">
+        <div class="p-col-12 p-md-6">
+          <span class="p-float-label">
+            <InputText
+              id="nombreTipoUsuario"
+              v-model="nuevoTipoUsuario.nombre"
+            />
+            <label for="nombreTipoUsuario">Nombre</label>
+          </span>
+        </div>
+      </div>
+      <Button label="Agregar" @click="agregarTipoUsuario" />
+    </div>
     <!-- Edit Dialog -->
     <Dialog
       v-model:visible="showEditDialog"
@@ -64,6 +78,25 @@
         <Button label="Enviar" severity="success" @click="enviarEdicion" />
       </div>
     </Dialog>
+    <!-- Confirmation Dialog -->
+    <Dialog
+      v-model:visible="showDeleteDialog"
+      header="Confirmar Eliminación"
+      :modal="true"
+    >
+      <div class="p-dialog-body">
+        ¿Está seguro de que desea eliminar el registro {{ deleteId }}?
+      </div>
+      <br />
+      <div class="p-dialog-footer">
+        <Button label="Cancelar" @click="cancelarEliminacion" />
+        <Button
+          label="Aceptar"
+          @click="eliminarRegistro"
+          class="p-button-danger"
+        />
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -82,13 +115,15 @@ export default {
         tipo_usuario_id: "",
         nombre: "",
       },
+      showDeleteDialog: false,
+      deleteId: null,
     };
   },
   methods: {
     // Método para cargar datos de tipoUsuarios desde el servidor
     loadData() {
       axios
-        .post("http://localhost:5000/tipo_usuarios")
+        .post("http://127.0.0.1:5000/tipo_usuarios")
         .then((response) => {
           this.tipoUsuarios = response.data;
           console.table(this.tipoUsuarios);
@@ -100,7 +135,7 @@ export default {
     // Método para agregar un nuevo tipo de usuario
     agregarTipoUsuario() {
       axios
-        .put("http://localhost:5000/tipo_usuario", this.nuevoTipoUsuario)
+        .put("http://127.0.0.1:5000/tipo_usuario", this.nuevoTipoUsuario)
         .then((response) => {
           // Handle the response (if needed)
           // For example, you can display a success message and refresh the data table
@@ -133,7 +168,7 @@ export default {
         nombre: this.editTipoUsuario.nombre,
       };
       axios
-        .patch("http://localhost:5000/tipo_usuario", dataToUpdate)
+        .patch("http://127.0.0.1:5000/tipo_usuario", dataToUpdate)
         .then((response) => {
           // Handle the response (if needed)
           // For example, you can display a success message and refresh the data table
@@ -143,6 +178,41 @@ export default {
         })
         .catch((error) => {
           console.error("Error al editar tipo de usuario:", error);
+        });
+    },
+    // Método para abrir el diálogo de confirmación de eliminación
+    eliminarTipoUsuario(tipoUsuario) {
+      this.deleteId = tipoUsuario.tipo_usuario_id;
+      this.showDeleteDialog = true;
+    },
+
+    // Método para cancelar la eliminación y cerrar el diálogo de confirmación
+    cancelarEliminacion() {
+      this.showDeleteDialog = false;
+      this.deleteId = null;
+    },
+
+    // Método para enviar la solicitud de eliminación al servidor
+    eliminarRegistro() {
+      const idToDelete = this.deleteId;
+      console.log(idToDelete);
+      // Assuming your endpoint supports DELETE requests with JSON data
+      axios
+        .delete(`http://127.0.0.1:5000/tipo_usuario`, {
+          data: { tipo_usuario_id: idToDelete },
+        })
+        .then((response) => {
+          // Handle the response (if needed)
+          // For example, you can display a success message and refresh the data table
+          console.log("Registro eliminado:", response.data);
+          this.loadData(); // Refresh the data table after deleting a record
+          this.showDeleteDialog = false; // Close the dialog after successful deletion
+          this.deleteId = null; // Reset the deleteId property
+        })
+        .catch((error) => {
+          console.error("Error al eliminar el registro:", error);
+          this.showDeleteDialog = false; // Close the dialog on error
+          this.deleteId = null; // Reset the deleteId property
         });
     },
   },
