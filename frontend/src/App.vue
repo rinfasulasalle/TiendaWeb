@@ -1,14 +1,14 @@
 <template>
-  <CmpTipoUsuarios />
+  <CmpUsuarios />
 </template>
 
 <script>
-import CmpTipoUsuarios from "./components/CmpTipoUsuarios.vue";
+import CmpUsuarios from "./components/CmpUsuarios.vue";
 
 export default {
   name: "App",
   components: {
-    CmpTipoUsuarios,
+    CmpUsuarios,
   },
 };
 </script>

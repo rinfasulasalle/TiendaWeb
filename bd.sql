@@ -53,3 +53,11 @@ CREATE TABLE DetalleVenta (
     FOREIGN KEY (id_venta) REFERENCES Ventas(id_venta),
     FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
 );
+
+
+SELECT * FROM Categorias;
+SELECT * FROM Productos;
+SELECT * FROM TipoUsuario;
+SELECT * FROM Usuarios;
+SELECT * FROM Ventas;
+SELECT * FROM DetalleVenta;
