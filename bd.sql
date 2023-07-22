@@ -1,9 +1,8 @@
 -- Tabla "Categorias"
 CREATE TABLE Categorias (
 	id_categoria INT PRIMARY KEY AUTO_INCREMENT,
-	nombre VARCHAR(100) NOT NULL,
+	nombre VARCHAR(100) NOT NULL
 );
-
 -- Tabla "Productos"
 CREATE TABLE Productos (
     id_producto INT PRIMARY KEY AUTO_INCREMENT,
@@ -15,13 +14,11 @@ CREATE TABLE Productos (
     stock INT NOT NULL,
     FOREIGN KEY (categoria_id) REFERENCES Categorias(id_categoria)
 );
-
 -- Tabla "TipoUsuario"
 CREATE TABLE TipoUsuario(
 	id_tipoUsuario INT PRIMARY KEY AUTO_INCREMENT,
-	nombre VARCHAR(100) NOT NULL,
+	nombre VARCHAR(100) NOT NULL
 );
-
 -- Tabla "Usuarios"
 CREATE TABLE Usuarios (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
@@ -55,9 +52,12 @@ CREATE TABLE DetalleVenta (
 );
 
 
+
 SELECT * FROM Categorias;
 SELECT * FROM Productos;
 SELECT * FROM TipoUsuario;
 SELECT * FROM Usuarios;
 SELECT * FROM Ventas;
 SELECT * FROM DetalleVenta;
+
+
