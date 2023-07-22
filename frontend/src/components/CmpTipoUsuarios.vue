@@ -4,7 +4,7 @@
     <h1>{{ titulo }}</h1>
 
     <!-- Tabla de PrimeVue con datos de tipoUsuarios -->
-    <div class="card">
+    <div class="card datatable-container">
       <DataTable
         :value="tipoUsuarios"
         :paginator="true"
@@ -34,8 +34,8 @@
       </DataTable>
     </div>
     <!-- Formulario para agregar tipo de usuario -->
-    <div class="card">
-      <h3>Agregar Tipo de Usuario</h3>
+    <div class="card form-container">
+      <h2>Agregar Tipo de Usuario</h2>
       <div class="p-grid p-fluid">
         <div class="p-col-12 p-md-6">
           <span class="p-float-label">
@@ -224,3 +224,13 @@ export default {
   },
 };
 </script>
+<style>
+.form-container {
+  max-width: 300px;
+  margin: 0 auto;
+}
+.datatable-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+</style>
