@@ -19,6 +19,19 @@
       </DataTable>
     </div>
   </div>
+  <!-- Formulario para agregar tipo de usuario -->
+  <div class="card">
+    <h2>Agregar Tipo de Usuario</h2>
+    <div class="p-grid p-fluid">
+      <div class="p-col-12 p-md-6">
+        <span class="p-float-label">
+          <InputText id="nombreTipoUsuario" v-model="nuevoTipoUsuario.nombre" />
+          <label for="nombreTipoUsuario">Nombre</label>
+        </span>
+      </div>
+    </div>
+    <Button label="Agregar" @click="agregarTipoUsuario" />
+  </div>
 </template>
 
 <script>
@@ -28,6 +41,9 @@ export default {
     return {
       titulo: "",
       tipoUsuarios: [],
+      nuevoTipoUsuario: {
+        nombre: "",
+      },
     };
   },
   methods: {
@@ -41,6 +57,24 @@ export default {
         })
         .catch((error) => {
           console.error("Error al cargar datos:", error);
+        });
+    },
+    // Método para agregar un nuevo tipo de usuario
+    agregarTipoUsuario() {
+      axios
+        .put("http://localhost:5000/tipo_usuario", this.nuevoTipoUsuario)
+        .then((response) => {
+          // Handle the response (if needed)
+          // For example, you can display a success message and refresh the data table
+          console.log("Tipo de usuario agregado:", response.data);
+          this.loadData(); // Refresh the data table after adding a new type of user
+          this.nuevoTipoUsuario = {
+            tipo_usuario_id: "",
+            nombre: "",
+          }; // Clear the form fields after successful submission
+        })
+        .catch((error) => {
+          console.error("Error al agregar tipo de usuario:", error);
         });
     },
   },
