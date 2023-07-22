@@ -16,21 +16,54 @@
         <!-- Columnas de la tabla -->
         <Column field="tipo_usuario_id" header="ID"></Column>
         <Column field="nombre" header="Nombre"></Column>
+        <Column header="Acciones" :exportable="false"></Column>
+        <!-- Custom slot for actions buttons in each row -->
+        <Column :exportable="false" style="min-width: 8rem">
+          <template #body="slotProps">
+            <Button
+              icon="pi pi-pencil"
+              class="mr-2"
+              @click="openEditDialog(slotProps.data)"
+            />
+            <Button
+              icon="pi pi-trash"
+              severity="danger"
+              @click="eliminarTipoUsuario(slotProps.data)"
+            />
+          </template>
+        </Column>
       </DataTable>
     </div>
-  </div>
-  <!-- Formulario para agregar tipo de usuario -->
-  <div class="card">
-    <h2>Agregar Tipo de Usuario</h2>
-    <div class="p-grid p-fluid">
-      <div class="p-col-12 p-md-6">
-        <span class="p-float-label">
-          <InputText id="nombreTipoUsuario" v-model="nuevoTipoUsuario.nombre" />
-          <label for="nombreTipoUsuario">Nombre</label>
-        </span>
+
+    <!-- Edit Dialog -->
+    <Dialog
+      v-model:visible="showEditDialog"
+      header="Editar Tipo de Usuario"
+      :modal="true"
+    >
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="editTipoUsuarioID">ID</label>
+          <InputText
+            id="editTipoUsuarioID"
+            v-model="editTipoUsuario.tipo_usuario_id"
+            :disabled="true"
+          />
+        </div>
+        <div class="p-field">
+          <label for="editNombreTipoUsuario">Nombre</label>
+          <InputText
+            id="editNombreTipoUsuario"
+            v-model="editTipoUsuario.nombre"
+          />
+        </div>
+        <br />
       </div>
-    </div>
-    <Button label="Agregar" @click="agregarTipoUsuario" />
+      <div class="p-dialog-footer">
+        <Button label="Cancelar" severity="danger" @click="cancelarEdicion" />
+        <Button label="Enviar" severity="success" @click="enviarEdicion" />
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -42,6 +75,11 @@ export default {
       titulo: "",
       tipoUsuarios: [],
       nuevoTipoUsuario: {
+        nombre: "",
+      },
+      showEditDialog: false,
+      editTipoUsuario: {
+        tipo_usuario_id: "",
         nombre: "",
       },
     };
@@ -75,6 +113,36 @@ export default {
         })
         .catch((error) => {
           console.error("Error al agregar tipo de usuario:", error);
+        });
+    },
+    // Método para abrir el diálogo de edición y cargar los datos del tipo de usuario
+    openEditDialog(tipoUsuario) {
+      this.editTipoUsuario = { ...tipoUsuario };
+      this.showEditDialog = true;
+    },
+
+    // Método para cancelar la edición y cerrar el diálogo
+    cancelarEdicion() {
+      this.showEditDialog = false;
+    },
+
+    // Método para enviar los cambios de edición
+    enviarEdicion() {
+      const dataToUpdate = {
+        tipo_usuario_id: this.editTipoUsuario.tipo_usuario_id,
+        nombre: this.editTipoUsuario.nombre,
+      };
+      axios
+        .patch("http://localhost:5000/tipo_usuario", dataToUpdate)
+        .then((response) => {
+          // Handle the response (if needed)
+          // For example, you can display a success message and refresh the data table
+          console.log("Tipo de usuario editado:", response.data);
+          this.loadData(); // Refresh the data table after editing a type of user
+          this.showEditDialog = false; // Close the dialog after successful submission
+        })
+        .catch((error) => {
+          console.error("Error al editar tipo de usuario:", error);
         });
     },
   },
