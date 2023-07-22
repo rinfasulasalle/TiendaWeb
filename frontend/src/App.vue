@@ -1,14 +1,14 @@
 <template>
-  <CmpUsuarios />
+  <CmpCateorias />
 </template>
 
 <script>
-import CmpUsuarios from "./components/CmpUsuarios.vue";
+import CmpCateorias from "./components/CmpCateorias.vue";
 
 export default {
   name: "App",
   components: {
-    CmpUsuarios,
+    CmpCateorias,
   },
 };
 </script>
