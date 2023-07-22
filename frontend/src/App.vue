@@ -1,17 +1,16 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <CmpTipoUsuarios />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CmpTipoUsuarios from "./components/CmpTipoUsuarios.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    CmpTipoUsuarios,
+  },
+};
 </script>
 
 <style>
